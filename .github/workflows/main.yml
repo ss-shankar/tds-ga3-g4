@@ -1,0 +1,26 @@
+name: Daily update
+
+on:
+  schedule:
+    - cron: "10 11 * * *"   # Runs every day at 7:00 UTC
+  workflow_dispatch:      # Optional: lets you run it manually
+
+jobs:
+  create-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 21f2001400@ds.study.iitm.ac.in - Update status file
+        run: |
+          echo "Updated on $(date)" >> devsync-status.txt
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add devsync-status.txt
+          git commit -m "Daily automated update"
+          git push
